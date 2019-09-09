@@ -1,0 +1,141 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: "2"
+
+volumes:
+  orderer.drugchain.com:
+  peer0.viepharmacorp.com:
+  peer1.viepharmacorp.com:
+  peer0.feedexcorp.com:
+  peer1.feedexcorp.com:
+  peer0.circleh.com:
+  peer1.circleh.com:
+  peer0.auditor.gov.com:
+  peer1.auditor.gov.com:
+
+networks:
+  byfn:
+
+services:
+  orderer.drugchain.com:
+    extends:
+      file: base/docker-compose-base.yaml
+      service: orderer.drugchain.com
+    container_name: orderer.drugchain.com
+    networks:
+      - byfn
+
+  peer0.viepharmacorp.com:
+    container_name: peer0.viepharmacorp.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.viepharmacorp.com
+    networks:
+      - byfn
+
+  peer1.viepharmacorp.com:
+    container_name: peer1.viepharmacorp.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.viepharmacorp.com
+    networks:
+      - byfn
+
+  peer0.feedexcorp.com:
+    container_name: peer0.feedexcorp.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.feedexcorp.com
+    networks:
+      - byfn
+
+  peer1.feedexcorp.com:
+    container_name: peer1.feedexcorp.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.feedexcorp.com
+    networks:
+      - byfn
+
+  peer0.circleh.com:
+    container_name: peer0.circleh.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.circleh.com
+    networks:
+      - byfn
+
+  peer1.circleh.com:
+    container_name: peer1.circleh.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.circleh.com
+    networks:
+      - byfn
+
+  peer0.auditor.gov.com:
+    container_name: peer0.auditor.gov.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.auditor.gov.com
+    networks:
+      - byfn
+
+  peer1.auditor.gov.com:
+    container_name: peer1.auditor.gov.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.auditor.gov.com
+    networks:
+      - byfn
+
+  # peer2.viepharmacorp.com:
+  #   container_name: peer2.viepharmacorp.com
+  #   extends:
+  #     file: base/docker-compose-base.yaml
+  #     service: peer2.viepharmacorp.com
+  #   networks:
+  #     - byfn
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    stdin_open: true
+    environment:
+      - SYS_CHANNEL=drugchain-sys-channel
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.viepharmacorp.com:7051
+      - CORE_PEER_LOCALMSPID=ViePharmaCorpMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/peers/peer0.viepharmacorp.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/peers/peer0.viepharmacorp.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/peers/peer0.viepharmacorp.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/users/Admin@viepharmacorp.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./chaincode/:/opt/gopath/src/github.com/chaincode
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.drugchain.com
+      - peer0.viepharmacorp.com
+      - peer1.viepharmacorp.com
+      - peer0.feedexcorp.com
+      - peer1.feedexcorp.com
+      - peer0.circleh.com
+      - peer1.circleh.com
+      - peer0.auditor.gov.com
+      - peer1.auditor.gov.com
+    networks:
+      - byfn

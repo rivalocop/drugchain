@@ -1,0 +1,53 @@
+{
+  "name": "drugchain-network-auditor",
+  "version": "1.0.0",
+  "client": {
+    "organization": "AuthorityOrg",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "AuthorityOrg": {
+      "mspid": "AuthorityOrgMSP",
+      "peers": ["peer0.auditor.gov.com", "peer1.auditor.gov.com"],
+      "certificateAuthorities": ["ca.auditor.gov.com"]
+    }
+  },
+  "peers": {
+    "peer0.auditor.com": {
+      "url": "grpcs://localhost:11051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/auditor.gov.com/tlsca/tlsca.auditor.gov.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.auditor.gov.com"
+      }
+    },
+    "peer1.auditor.com": {
+      "url": "grpcs://localhost:12051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/auditor.gov.com/tlsca/tlsca.auditor.gov.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.auditor.gov.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.auditor.com": {
+      "url": "https://localhost:13054",
+      "caName": "ca-auditor",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/auditor.gov.com/tlsca/tlsca.auditor.gov.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

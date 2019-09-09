@@ -1,0 +1,53 @@
+{
+  "name": "drugchain-network-viepharmacorp",
+  "version": "1.0.0",
+  "client": {
+    "organization": "ViePharmaCorp",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "ViePharmaCorp": {
+      "mspid": "ViePharmaCorpMSP",
+      "peers": ["peer0.viepharmacorp.com", "peer1.viepharmacorp.com"],
+      "certificateAuthorities": ["ca.viepharmacorp.com"]
+    }
+  },
+  "peers": {
+    "peer0.viepharmacorp.com": {
+      "url": "grpcs://localhost:7051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/viepharmacorp.com/tlsca/tlsca.viepharmacorp.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.viepharmacorp.com"
+      }
+    },
+    "peer1.viepharmacorp.com": {
+      "url": "grpcs://localhost:8051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/viepharmacorp.com/tlsca/tlsca.viepharmacorp.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.viepharmacorp.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.viepharmacorp.com": {
+      "url": "https://localhost:7054",
+      "caName": "ca-viepharmacorp",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/viepharmacorp.com/tlsca/tlsca.viepharmacorp.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

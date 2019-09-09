@@ -1,0 +1,53 @@
+{
+  "name": "drugchain-network-feedexcorp",
+  "version": "1.0.0",
+  "client": {
+    "organization": "FeedexCorp",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "FeedexCorp": {
+      "mspid": "FeedexCorpMSP",
+      "peers": ["peer0.feedexcorp.com", "peer1.feedexcorp.com"],
+      "certificateAuthorities": ["ca.feedexcorp.com"]
+    }
+  },
+  "peers": {
+    "peer0.feedexcorp.com": {
+      "url": "grpcs://localhost:9051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/feedexcorp.com/tlsca/tlsca.feedexcorp.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.feedexcorp.com"
+      }
+    },
+    "peer1.feedexcorp.com": {
+      "url": "grpcs://localhost:10051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/feedexcorp.com/tlsca/tlsca.feedexcorp.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.feedexcorp.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.feedexcorp.com": {
+      "url": "https://localhost:9054",
+      "caName": "ca-feedexcorp",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/feedexcorp.com/tlsca/tlsca.feedexcorp.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

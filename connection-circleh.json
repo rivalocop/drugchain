@@ -1,0 +1,53 @@
+{
+  "name": "drugchain-network-circleh",
+  "version": "1.0.0",
+  "client": {
+    "organization": "CircleH",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "CircleH": {
+      "mspid": "CircleHMSP",
+      "peers": ["peer0.circleh.com", "peer1.circleh.com"],
+      "certificateAuthorities": ["ca.circleh.com"]
+    }
+  },
+  "peers": {
+    "peer0.circleh.com": {
+      "url": "grpcs://localhost:11051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/circleh.com/tlsca/tlsca.circleh.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.circleh.com"
+      }
+    },
+    "peer1.circleh.com": {
+      "url": "grpcs://localhost:12051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/circleh.com/tlsca/tlsca.circleh.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.circleh.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.circleh.com": {
+      "url": "https://localhost:11054",
+      "caName": "ca-circleh",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/circleh.com/tlsca/tlsca.circleh.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: "2"
+
+volumes:
+  orderer2.drugchain.com:
+  orderer3.drugchain.com:
+  orderer4.drugchain.com:
+  orderer5.drugchain.com:
+
+networks:
+  byfn:
+
+services:
+  orderer2.drugchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer2.drugchain.com
+    networks:
+      - byfn
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer2.drugchain.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer2.drugchain.com/tls/:/var/hyperledger/orderer/tls
+      - orderer2.drugchain.com:/var/hyperledger/production/orderer
+    ports:
+      - 8050:7050
+
+  orderer3.drugchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer3.drugchain.com
+    networks:
+      - byfn
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer3.drugchain.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer3.drugchain.com/tls/:/var/hyperledger/orderer/tls
+      - orderer3.drugchain.com:/var/hyperledger/production/orderer
+    ports:
+      - 9050:7050
+
+  orderer4.drugchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer4.drugchain.com
+    networks:
+      - byfn
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer4.drugchain.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer4.drugchain.com/tls/:/var/hyperledger/orderer/tls
+      - orderer4.drugchain.com:/var/hyperledger/production/orderer
+    ports:
+      - 10050:7050
+
+  orderer5.drugchain.com:
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    container_name: orderer5.drugchain.com
+    networks:
+      - byfn
+    volumes:
+      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer5.drugchain.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/drugchain.com/orderers/orderer5.drugchain.com/tls/:/var/hyperledger/orderer/tls
+      - orderer5.drugchain.com:/var/hyperledger/production/orderer
+    ports:
+      - 11050:7050

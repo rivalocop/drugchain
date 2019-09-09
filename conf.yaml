@@ -1,0 +1,10 @@
+version: 0
+tlsconfig:
+  certpath: ""
+  keypath: ""
+  peercacertpath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/users/User1@viepharmacorp.com/tls/ca.crt
+  timeout: 0s
+signerconfig:
+  mspid: ViePharmaCorpMSP
+  identitypath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/users/User1@viepharmacorp.com/msp/signcerts/User1@viepharmacorp.com-cert.pem
+  keypath: /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/viepharmacorp.com/users/User1@viepharmacorp.com/msp/keystore/ae6e7f0ded60384eb5bb0c0a550de5f32787c4f4b86c61f18bb1716f778222a8_sk
