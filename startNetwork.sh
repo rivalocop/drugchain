@@ -10,14 +10,29 @@ echo "Generating artifact for drugtxchannel"
 ../bin/configtxgen -profile DrugTxChannel -outputCreateChannelTx ./channel-artifacts/drugtxchannel.tx -channelID drugtxchannel
 echo "Generating artifact for distributorargchannel"
 ../bin/configtxgen -profile DistributorArgChannel -outputCreateChannelTx ./channel-artifacts/distributorargchannel.tx -channelID distributorargchannel
-echo "Configuaring anchor peer for ViePharmaCorp"
-../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/ViePharmaCorpMSPanchors.tx -channelID drugtxchannel -asOrg ViePharmaCorpMSP
-echo "Configuaring anchor peer for FeedexCorp"
-../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/FeedexCorpMSPanchors.tx -channelID drugtxchannel -asOrg FeedexCorpMSP
-echo "Configuaring anchor peer for CircleH"
-../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/CircleHMSPanchors.tx -channelID drugtxchannel -asOrg CircleHMSP
-echo "Configuaring anchor peer for AuthorityOrg"
-../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/AuthorityOrgMSPanchors.tx -channelID drugtxchannel -asOrg AuthorityOrgMSP
+echo "Generating artifact for retailerargchannel"
+../bin/configtxgen -profile RetailerArgChannel -outputCreateChannelTx ./channel-artifacts/retailerargchannel.tx -channelID retailerargchannel
+
+
+echo "Configuaring anchor peer for ViePharmaCorp drugtxchannel"
+../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/ViePharmaCorpMSPanchors_drugtxchannel.tx -channelID drugtxchannel -asOrg ViePharmaCorpMSP
+echo "Configuaring anchor peer for FeedexCorp drugtxchannel"
+../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/FeedexCorpMSPanchors_drugtxchannel.tx -channelID drugtxchannel -asOrg FeedexCorpMSP
+echo "Configuaring anchor peer for CircleH drugtxchannel"
+../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/CircleHMSPanchors_drugtxchannel.tx -channelID drugtxchannel -asOrg CircleHMSP
+echo "Configuaring anchor peer for AuthorityOrg drugtxchannel"
+../bin/configtxgen -profile DrugTxChannel -outputAnchorPeersUpdate ./channel-artifacts/AuthorityOrgMSPanchors_drugtxchannel.tx -channelID drugtxchannel -asOrg AuthorityOrgMSP
+
+echo "Configuaring anchor peer for ViePharmaCorp distributorargchannel"
+../bin/configtxgen -profile DistributorArgChannel -outputAnchorPeersUpdate ./channel-artifacts/ViePharmaCorpMSPanchors_distributorargchannel.tx -channelID distributorargchannel -asOrg ViePharmaCorpMSP
+echo "Configuaring anchor peer for FeedexCorp distributorargchannel"
+../bin/configtxgen -profile DistributorArgChannel -outputAnchorPeersUpdate ./channel-artifacts/FeedexCorpMSPanchors_distributorargchannel.tx -channelID distributorargchannel -asOrg FeedexCorpMSP
+
+echo "Configuaring anchor peer for FeedexCorp retailerargchannel"
+../bin/configtxgen -profile RetailerArgChannel -outputAnchorPeersUpdate ./channel-artifacts/FeedexCorpMSPanchors_retailerargchannel.tx -channelID retailerargchannel -asOrg FeedexCorpMSP
+echo "Configuaring anchor peer for CircleH retailerargchannel"
+../bin/configtxgen -profile RetailerArgChannel -outputAnchorPeersUpdate ./channel-artifacts/CircleHMSPanchors_retailerargchannel.tx -channelID retailerargchannel -asOrg CircleHMSP
+
 
 echo "Sleep 5s"
 sleep 5
@@ -55,19 +70,33 @@ docker exec \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE}
 
-# echo "Sleep 5s"
-# sleep 5 
+echo "Sleep 5s"
+sleep 5 
 
-# echo "Create channel distributorargchannel"
-# docker exec \
-#   -e CORE_PEER_LOCALMSPID=ViePharmaCorpMSP \
-#   -e CORE_PEER_ADDRESS=peer0.viepharmacorp.com:7051 \
-#   -e CORE_PEER_MSPCONFIGPATH=${VIEPHARMACORP_MSPCONFIGPATH} \
-#   -e CORE_PEER_TLS_ROOTCERT_FILE=${VIEPHARMACORP_TLS_ROOTCERT_FILE} \
-#   cli \
-#   peer channel create \
-#     -o orderer.drugchain.com:7050 \
-#     -c distributorargchannel \
-#     -f ./channel-artifacts/distributorargchannel.tx \
-#     --tls \
-#     --cafile ${ORDERER_TLS_ROOTCERT_FILE}
+echo "Create channel distributorargchannel"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=ViePharmaCorpMSP \
+  -e CORE_PEER_ADDRESS=peer0.viepharmacorp.com:7051 \
+  -e CORE_PEER_MSPCONFIGPATH=${VIEPHARMACORP_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${VIEPHARMACORP_TLS_ROOTCERT_FILE} \
+  cli \
+  peer channel create \
+    -o orderer.drugchain.com:7050 \
+    -c distributorargchannel \
+    -f ./channel-artifacts/distributorargchannel.tx \
+    --tls \
+    --cafile ${ORDERER_TLS_ROOTCERT_FILE}
+
+echo "Create channel retailerargchannel"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
+  -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
+  -e CORE_PEER_MSPCONFIGPATH=${FEEDEXCORP_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${FEEDEXCORP_TLS_ROOTCERT_FILE} \
+  cli \
+  peer channel create \
+    -o orderer.drugchain.com:7050 \
+    -c retailerargchannel \
+    -f ./channel-artifacts/retailerargchannel.tx \
+    --tls \
+    --cafile ${ORDERER_TLS_ROOTCERT_FILE}

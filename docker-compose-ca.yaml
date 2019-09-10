@@ -6,7 +6,7 @@
 version: "2"
 
 networks:
-  chaindrug-network_byfn:
+  drugchain-network_byfn:
 
 services:
   ca0:
@@ -25,7 +25,7 @@ services:
       - ./crypto-config/peerOrganizations/viepharmacorp.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerViePharmaCorp
     networks:
-      - chaindrug-network_byfn
+      - drugchain-network_byfn
 
   ca1:
     image: hyperledger/fabric-ca
@@ -43,7 +43,7 @@ services:
       - ./crypto-config/peerOrganizations/feedexcorp.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerFeedexCorp
     networks:
-      - chaindrug-network_byfn
+      - drugchain-network_byfn
 
   ca2:
     image: hyperledger/fabric-ca
@@ -61,7 +61,7 @@ services:
       - ./crypto-config/peerOrganizations/feedexcorp.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerCIRCLEH
     networks:
-      - chaindrug-network_byfn
+      - drugchain-network_byfn
 
   ca2:
     image: hyperledger/fabric-ca
@@ -79,4 +79,4 @@ services:
       - ./crypto-config/peerOrganizations/auditor.gov.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerAuthorityOrg
     networks:
-      - chaindrug-network_byfn
+      - drugchain-network_byfn
