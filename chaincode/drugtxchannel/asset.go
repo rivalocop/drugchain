@@ -32,7 +32,7 @@ type Drug struct {
 
 /*
  * The Init method is called when the Smart Contract "fabcar" is instantiated by the blockchain network
- * Best practice is to have any Ledger initialization in separate function -- see initLedger()
+ * Best practice is to have any Ledger initialization in separate function -- see InitLedger()
  */
 func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 	return shim.Success(nil)
@@ -47,20 +47,20 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	// Retrieve the requested Smart Contract function and arguments
 	function, args := APIstub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger appropriately
-	if function == "queryDrug" {
-		return s.queryDrug(APIstub, args)
-	} else if function == "initLedger" {
-		return s.initLedger(APIstub)
-	} else if function == "createDrug" {
-		return s.createDrug(APIstub, args)
-	} else if function == "queryAllDrugs" {
-		return s.queryAllDrugs(APIstub)
+	if function == "QueryDrug" {
+		return s.QueryDrug(APIstub, args)
+	} else if function == "InitLedger" {
+		return s.InitLedger(APIstub)
+	} else if function == "CreateDrug" {
+		return s.CreateDrug(APIstub, args)
+	} else if function == "QueryAllDrugs" {
+		return s.QueryAllDrugs(APIstub)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
 }
 
-func (s *SmartContract) queryDrug(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) QueryDrug(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -70,7 +70,7 @@ func (s *SmartContract) queryDrug(APIstub shim.ChaincodeStubInterface, args []st
 	return shim.Success(drugAsBytes)
 }
 
-func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
+func (s *SmartContract) InitLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	drugs := []Drug{
 		Drug{Name: "Paracetamol", Cost: 6.5, Quantity: "10", UseCase: "Sick Burner", Manufacturer: "ViePharmaCorp", DeliveryOwner: "ViePharmaCorp"},
 		Drug{Name: "Paracetamol2", Cost: 7, Quantity: "11", UseCase: "Sick Burner", Manufacturer: "ViePharmaCorp", DeliveryOwner: "ViePharmaCorp"},
@@ -90,7 +90,7 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 	return shim.Success(nil)
 }
 
-func (s *SmartContract) createDrug(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (s *SmartContract) CreateDrug(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
@@ -98,7 +98,15 @@ func (s *SmartContract) createDrug(APIstub shim.ChaincodeStubInterface, args []s
 
 	newCost, _ := strconv.ParseFloat(args[4], 64)
 
-	var drug = Drug{Name: args[1], Quantity: args[2], UseCase: args[3], Cost: newCost, Manufacturer: "ViePharmaCorp", DeliveryOwner: "ViePharmaCorp"}
+	var drug = Drug{
+		Name:          args[1],
+		Quantity:      args[2],
+		UseCase:       args[3],
+		Cost:          newCost,
+		Manufacturer:  "ViePharmaCorp",
+		DeliveryOwner: "ViePharmaCorp",
+		UpdatedDate:   time.Now().Format("Mon Jan 2 15:04:05 -0700 MST 2006"),
+	}
 
 	drugAsBytes, _ := json.Marshal(drug)
 	APIstub.PutState(args[0], drugAsBytes)
@@ -106,7 +114,7 @@ func (s *SmartContract) createDrug(APIstub shim.ChaincodeStubInterface, args []s
 	return shim.Success(nil)
 }
 
-func (s *SmartContract) queryAllDrugs(APIstub shim.ChaincodeStubInterface) sc.Response {
+func (s *SmartContract) QueryAllDrugs(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 	startKey := "DRUG0"
 	endKey := "DRUG999"
@@ -144,7 +152,7 @@ func (s *SmartContract) queryAllDrugs(APIstub shim.ChaincodeStubInterface) sc.Re
 	}
 	buffer.WriteString("]")
 
-	fmt.Printf("- queryAllDrugs:\n%s\n", buffer.String())
+	fmt.Printf("- QueryAllDrugs:\n%s\n", buffer.String())
 
 	return shim.Success(buffer.Bytes())
 }

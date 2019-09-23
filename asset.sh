@@ -10,6 +10,7 @@ AUDITOR_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/peerOrganizations/auditor.gov.co
 ORDERER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/ordererOrganizations/drugchain.com/orderers/orderer.drugchain.com/msp/tlscacerts/tlsca.drugchain.com-cert.pem
 DRUGTX_CHAINCODE_PATH=github.com/chaincode/drugtxchannel/
 DISTRIBUTOR_CHAINCODE_PATH=github.com/chaincode/distributorargchannel/
+RETAILER_CHAINCODE_PATH=github.com/chaincode/retailerargchannel/
 
 echo "Joining peer0.viepharmacorp.com to drugtxchannel"
 docker exec \
@@ -283,7 +284,7 @@ docker exec \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE}
 
-echo "Installing smartcontract on peer0.viepharmacorp.com"
+echo "Installing drugtx smartcontract on peer0.viepharmacorp.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=ViePharmaCorpMSP \
   -e CORE_PEER_ADDRESS=peer0.viepharmacorp.com:7051 \
@@ -295,7 +296,7 @@ docker exec \
     -v 1.0 \
     -p "${DRUGTX_CHAINCODE_PATH}"
 
-echo "Installing smartcontract on peer0.feedexcorp.com"
+echo "Installing drugtx smartcontract on peer0.feedexcorp.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
   -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
@@ -307,7 +308,7 @@ docker exec \
     -v 1.0 \
     -p "${DRUGTX_CHAINCODE_PATH}"
 
-echo "Installing smartcontract on peer0.viepharmacorp.com"
+echo "Installing distributor smartcontract on peer0.viepharmacorp.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=ViePharmaCorpMSP \
   -e CORE_PEER_ADDRESS=peer0.viepharmacorp.com:7051 \
@@ -319,7 +320,7 @@ docker exec \
     -v 1.0 \
     -p "${DISTRIBUTOR_CHAINCODE_PATH}"
 
-echo "Installing smartcontract on peer0.feedexcorp.com"
+echo "Installing distributor smartcontract on peer0.feedexcorp.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
   -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
@@ -355,6 +356,30 @@ docker exec \
     -v 1.0 \
     -p "${DRUGTX_CHAINCODE_PATH}"
 
+echo "Installing retailerargchannel smartcontract on peer0.feedex.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
+  -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
+  -e CORE_PEER_MSPCONFIGPATH=${FEEDEXCORP_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${FEEDEXCORP_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n retailercc \
+    -v 1.0 \
+    -p "${RETAILER_CHAINCODE_PATH}"
+
+echo "Installing retailerargchannel smartcontract on peer0.circleh.com"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=CircleHMSP \
+  -e CORE_PEER_ADDRESS=peer0.circleh.com:11051 \
+  -e CORE_PEER_MSPCONFIGPATH=${CIRCLEH_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${CIRCLEH_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode install \
+    -n retailercc \
+    -v 1.0 \
+    -p "${RETAILER_CHAINCODE_PATH}"
+
 echo "Instantiating smart contract on drugtxchannel"
 docker exec \
   -e CORE_PEER_LOCALMSPID=ViePharmaCorpMSP \
@@ -386,5 +411,22 @@ docker exec \
     -v 1.0 \
     -c '{"Args":[]}' \
     -P "AND('ViePharmaCorpMSP.peer','FeedexCorpMSP.peer')" \
+    --tls \
+    --cafile ${ORDERER_TLS_ROOTCERT_FILE}
+
+echo "Instantiating smart contract on retailerargchannel"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
+  -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
+  -e CORE_PEER_MSPCONFIGPATH=${FEEDEXCORP_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${FEEDEXCORP_TLS_ROOTCERT_FILE} \
+  cli \
+  peer chaincode instantiate \
+    -o orderer.drugchain.com:7050 \
+    -C retailerargchannel \
+    -n retailercc \
+    -v 1.0 \
+    -c '{"Args":[]}' \
+    -P "AND('CircleHMSP.peer','FeedexCorpMSP.peer')" \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE}

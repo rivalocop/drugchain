@@ -17,7 +17,7 @@ docker exec \
   -e CORE_PEER_MSPCONFIGPATH=${VIEPHARMACORP_MSPCONFIGPATH} \
   -e CORE_PEER_TLS_ROOTCERT_FILE=${VIEPHARMACORP_TLS_ROOTCERT_FILE} \
   cli \
-    peer chaincode invoke -o orderer.drugchain.com:7050 -C drugtxchannel -n drugcc -c '{"function":"initLedger","Args":[]}' \
+    peer chaincode invoke -o orderer.drugchain.com:7050 -C drugtxchannel -n drugcc -c '{"function":"InitLedger","Args":[]}' \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
     --peerAddresses peer0.viepharmacorp.com:7051 \
@@ -36,10 +36,27 @@ docker exec \
   -e CORE_PEER_MSPCONFIGPATH=${VIEPHARMACORP_MSPCONFIGPATH} \
   -e CORE_PEER_TLS_ROOTCERT_FILE=${VIEPHARMACORP_TLS_ROOTCERT_FILE} \
   cli \
-    peer chaincode invoke -o orderer.drugchain.com:7050 -C distributorargchannel -n distributorcc -c '{"function":"initBalance","Args":[]}' \
+    peer chaincode invoke -o orderer.drugchain.com:7050 -C distributorargchannel -n distributorcc -c '{"function":"initLedger","Args":[]}' \
     --tls \
     --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
     --peerAddresses peer0.viepharmacorp.com:7051 \
     --peerAddresses peer0.feedexcorp.com:9051 \
     --tlsRootCertFiles ${VIEPHARMACORP_TLS_ROOTCERT_FILE} \
-    --tlsRootCertFiles ${FEEDEXCORP_TLS_ROOTCERT_FILE} 
+    --tlsRootCertFiles ${FEEDEXCORP_TLS_ROOTCERT_FILE}
+
+echo "Init ledger function retailerarg"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=FeedexCorpMSP \
+  -e CORE_PEER_ADDRESS=peer0.feedexcorp.com:9051 \
+  -e CORE_PEER_MSPCONFIGPATH=${FEEDEXCORP_MSPCONFIGPATH} \
+  -e CORE_PEER_TLS_ROOTCERT_FILE=${FEEDEXCORP_TLS_ROOTCERT_FILE} \
+  cli \
+    peer chaincode invoke -o orderer.drugchain.com:7050 -C retailerargchannel -n retailercc -c '{"function":"initLedger","Args":[]}' \
+    --tls \
+    --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
+    --peerAddresses peer0.circleh.com:11051 \
+    --peerAddresses peer0.feedexcorp.com:9051 \
+    --tlsRootCertFiles ${CIRCLEH_TLS_ROOTCERT_FILE} \
+    --tlsRootCertFiles ${FEEDEXCORP_TLS_ROOTCERT_FILE}
+
+  
