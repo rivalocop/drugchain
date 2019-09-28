@@ -58,12 +58,12 @@ services:
       - "11054:11054"
     command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.circleh.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${CIRCLEH_PRIVATE_KEY} -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/feedexcorp.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peerCIRCLEH
+      - ./crypto-config/peerOrganizations/circleh.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerCircleH
     networks:
       - drugchain-network_byfn
 
-  ca2:
+  ca3:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server

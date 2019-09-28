@@ -52,7 +52,7 @@ sudo apt-get update
 echo "Install Golang"
 sudo apt-get install -y golang-go
 echo "set path variable env for golang"
-export GOROOT=/usr/lib/go
+export GOROOT=/usr/bin/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 source $HOME/.zshrc
@@ -71,8 +71,8 @@ echo "Install binary"
 mkdir -p $HOME/drugchain
 cd $HOME/drugchain
 git clone https://github.com/rivalocop/drugchain.git drugchain-network
-echo "Pulling binaries and docker images 1.4.3 version"
-curl https://raw.githubusercontent.com/rivalocop/drugchain/master/bootstrap.sh | bash -s -- 1.4.3 1.4.3 -s
+echo "Pulling binaries and docker images 1.4.2 version"
+curl https://raw.githubusercontent.com/rivalocop/drugchain/master/bootstrap.sh | bash -s -- 1.4.2 1.4.2 -s
 
 echo "Make channel-artifact directory"
 mkdir -p $HOME/drugchain/drugchain-network/channel-artifacts

@@ -55,6 +55,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.CreateDrug(APIstub, args)
 	} else if function == "QueryAllDrugs" {
 		return s.QueryAllDrugs(APIstub)
+	} else if function == "ChangeOwner" {
+		return s.changeDeliveryOwner(APIstub, args)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
@@ -168,7 +170,9 @@ func (s *SmartContract) changeDeliveryOwner(APIstub shim.ChaincodeStubInterface,
 
 	json.Unmarshal(drugAsBytes, &drug)
 	drug.DeliveryOwner = args[1]
-	drug.UpdatedDate = time.Now().Format("Mon Jan 2 15:04:05 -0700 MST 2006")
+	// drug.UpdatedDate = time.Now().Format("Mon Jan 2 15:04:05 -0700 MST 2006")
+
+	drugAsBytes, _ = json.Marshal(drug)
 	APIstub.PutState(args[0], drugAsBytes)
 
 	return shim.Success(nil)
